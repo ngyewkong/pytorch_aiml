@@ -1,5 +1,4 @@
 # %% packages
-from turtle import color
 
 import numpy as np
 import pandas as pd
@@ -59,6 +58,14 @@ output_dim = 1
 model = LinearRegressionTorch(input_size=input_dim, output_size=output_dim)
 print(model)
 
+print(hasattr(model, "named_parameters"))
+print(model.named_parameters)
+
+# print the named parameters
+print("----- Model's Named Parameters -----")
+for name, param in model.named_parameters():
+    print(name, param.shape, param.detach().numpy())
+
 # %% loss function
 
 # using Mean Squared Error Loss from torch.nn
@@ -72,7 +79,9 @@ optimizer = torch.optim.SGD(model.parameters(), lr=LR)
 # %% perform training
 
 losses, slope, bias = [], [], []
-NUM_EPOCHS = 1000
+
+# test with different epoch value (1000, 10000, 100000)
+NUM_EPOCHS = 10000
 
 for epoch in range(NUM_EPOCHS):
     # set gradients to zeros
@@ -121,4 +130,8 @@ y_pred = model(X).data.numpy().reshape(-1)
 sns.scatterplot(x=X_list, y=y_list)  # actual data plot
 sns.scatterplot(x=X_list, y=y_pred, color='red')  # the linear regression line
 
+# %%
+# bias: 37.3, slope: -5.3
+print(f"Bias: {bias}\n")
+print(f"Slope: {slope}\n")
 # %%
